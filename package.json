@@ -1,0 +1,37 @@
+{
+  "name": "api-replay",
+  "version": "1.0.0",
+  "description": "Record real API traffic, replay it anywhere, and instantly spot what changed",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "main": "./src/index.js",
+  "bin": {
+    "api-replay": "./src/cli/index.js"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "api",
+    "replay",
+    "record",
+    "diff",
+    "express",
+    "middleware",
+    "debugging",
+    "testing"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "nanoid": "^5.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.0"
+  }
+}
