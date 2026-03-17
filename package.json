@@ -22,7 +22,11 @@
   },
   "scripts": {
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "lint": "eslint src/",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepublishOnly": "npm test"
   },
   "keywords": [
     "api",
@@ -39,12 +43,15 @@
     "request",
     "response"
   ],
-  "author": "",
+  "author": "ashok1706",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/ashok1706/api-replay.git"
   },
-  "homepage": "",
+  "bugs": {
+    "url": "https://github.com/ashok1706/api-replay/issues"
+  },
+  "homepage": "https://github.com/ashok1706/api-replay#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
@@ -53,6 +60,8 @@
     "nanoid": "^5.0.0"
   },
   "devDependencies": {
+    "eslint": "10.0.3",
+    "prettier": "3.8.1",
     "vitest": "^3.0.0"
   }
 }

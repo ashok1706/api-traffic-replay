@@ -23,7 +23,7 @@ function deepDiff(a, b, path = '') {
   if (a === b) return changes;
 
   // One is null/undefined or type mismatch
-  if (a == null || b == null || typeof a !== typeof b) {
+  if (a === null || a === undefined || b === null || b === undefined || typeof a !== typeof b) {
     changes[path || '(root)'] = { before: a, after: b };
     return changes;
   }

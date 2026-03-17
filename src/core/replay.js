@@ -39,7 +39,7 @@ export async function replay(id, options = {}) {
   // Build fetch options
   const fetchOptions = { method, headers };
 
-  if (method !== 'GET' && method !== 'HEAD' && body != null) {
+  if (method !== 'GET' && method !== 'HEAD' && body !== null && body !== undefined) {
     const contentType = headers['content-type'] || '';
 
     if (contentType.includes('application/x-www-form-urlencoded')) {
