@@ -1,14 +1,35 @@
-# api-replay
+# api-traffic-replay
+
+[![npm version](https://img.shields.io/npm/v/api-traffic-replay.svg)](https://www.npmjs.com/package/api-traffic-replay)
+[![CI](https://github.com/ashok1706/api-traffic-replay/actions/workflows/ci.yml/badge.svg)](https://github.com/ashok1706/api-traffic-replay/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 
 > Record real API traffic, replay it anywhere, and instantly spot what changed.
 
-**api-replay** is a lightweight Node.js tool that records real API requests (in production or staging), replays them against any environment, and diffs the responses to detect breaking changes or unexpected behavior.
+**api-traffic-replay** is a lightweight Node.js tool that records real API requests (in production or staging), replays them against any environment, and diffs the responses to detect breaking changes or unexpected behavior.
+
+---
+
+## Why?
+
+Debugging APIs is painful because:
+
+- Bugs often happen **only in production**
+- Reproducing exact requests is hard (headers, auth, payload)
+- Logs don't tell the full story
+
+**api-traffic-replay** turns real traffic into reproducible test cases — automatically.
+
+---
 
 ## Install
 
 ```bash
-npm install api-replay
+npm install api-traffic-replay
 ```
+
+---
 
 ## Quick Start
 
@@ -16,7 +37,7 @@ npm install api-replay
 
 ```js
 import express from 'express';
-import { apiReplay } from 'api-replay';
+import { apiReplay } from 'api-traffic-replay';
 
 const app = express();
 
@@ -41,16 +62,16 @@ Every request/response is saved as a JSON file in `./recordings/`.
 ### 2. List and inspect recordings
 
 ```bash
-npx api-replay list
-# abc123def456  GET    /api/users  [200]  2025-01-15T10:30:00.000Z
+npx api-traffic-replay list
+# abc123def456  GET    /api/users  [200]  2026-03-17T10:30:00.000Z
 
-npx api-replay show abc123def456
+npx api-traffic-replay show abc123def456
 ```
 
 ### 3. Replay against another environment
 
 ```bash
-npx api-replay replay abc123def456 --base-url http://localhost:3000
+npx api-traffic-replay replay abc123def456 --base-url http://localhost:3000
 ```
 
 ```
@@ -80,6 +101,8 @@ Duration: 42ms → 55ms
   + users[0].email: "alicia@example.com"
 ```
 
+---
+
 ## API
 
 ### `apiReplay(options?)`
@@ -105,7 +128,7 @@ app.use(apiReplay(options));
 Replay a recorded request against a target environment.
 
 ```js
-import { replay } from 'api-replay';
+import { replay } from 'api-traffic-replay';
 
 const result = await replay('abc123', {
   baseUrl: 'http://localhost:3000',
@@ -135,7 +158,7 @@ console.log(result.original); // original recorded response
 Deep-diff two responses.
 
 ```js
-import { diff, formatDiff } from 'api-replay';
+import { diff, formatDiff } from 'api-traffic-replay';
 
 const result = diff(originalResponse, replayedResponse);
 
@@ -150,7 +173,7 @@ console.log(formatDiff(result));
 ### `loadRecording(id)` / `listRecordings()`
 
 ```js
-import { loadRecording, listRecordings } from 'api-replay';
+import { loadRecording, listRecordings } from 'api-traffic-replay';
 
 const recordings = listRecordings();
 const recording = loadRecording('abc123');
@@ -159,7 +182,7 @@ const recording = loadRecording('abc123');
 ### `setRecordingsDir(dir)` / `setMaxBodySize(bytes)`
 
 ```js
-import { setRecordingsDir, setMaxBodySize } from 'api-replay';
+import { setRecordingsDir, setMaxBodySize } from 'api-traffic-replay';
 
 setRecordingsDir('/var/data/recordings');
 setMaxBodySize(5 * 1024 * 1024); // 5MB (default: 1MB)
@@ -167,10 +190,12 @@ setMaxBodySize(5 * 1024 * 1024); // 5MB (default: 1MB)
 
 Bodies exceeding the max size are automatically truncated with a preview.
 
+---
+
 ## CLI
 
 ```
-api-replay <command> [options]
+api-traffic-replay <command> [options]
 
 Commands:
   list                         List all recordings
@@ -182,28 +207,50 @@ Options:
   --timeout <ms>               Request timeout (default: 30000)
 ```
 
+---
+
+## Use Cases
+
+| Use Case | How |
+|----------|-----|
+| Debug production-only bugs | Replay the exact failing request locally |
+| Validate API changes | Replay old traffic against new code, spot diffs |
+| Regression testing | Turn recordings into reusable test cases |
+| Detect breaking changes in CI | Automate replay + diff in your pipeline |
+| Investigate third-party APIs | Record and compare payment/webhook calls |
+
+---
+
 ## Production Safety
 
-- **Async I/O** — recordings are saved asynchronously, never blocking your request handlers
+- **Async I/O** — recordings are saved asynchronously, never blocking request handlers
 - **Body size limits** — large bodies are auto-truncated (configurable, default 1MB)
-- **Deep masking** — `maskHeaders` and `maskBody` work on nested objects
+- **Deep masking** — `maskHeaders` and `maskBody` work on deeply nested objects and arrays
 - **Error isolation** — recording failures never crash your app (use `onError` callback)
 - **Path traversal protection** — recording IDs are sanitized before file access
 - **Circular reference handling** — safe JSON serialization for edge cases
 
-## Use Cases
-
-- **Debug production-only bugs** — replay the exact failing request locally
-- **Validate API changes** — replay old traffic against new code, spot diffs
-- **Reuse real requests for testing** — turn recordings into regression tests
-- **Detect breaking changes in CI** — automate replay + diff in your pipeline
-- **Investigate third-party API issues** — record and compare payment/webhook calls
+---
 
 ## Requirements
 
 - Node.js >= 18.0.0
 - Express (for middleware recording)
 
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for reporting vulnerabilities.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release history.
+
 ## License
 
-MIT
+[MIT](LICENSE) — made by [@ashok1706](https://github.com/ashok1706)
